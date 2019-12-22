@@ -1,23 +1,13 @@
 package com.sap.kaisa
 
-import android.content.Context
-import android.content.Intent
-import android.content.pm.PackageManager
-import android.location.LocationManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.provider.Settings
-import android.util.Base64
-import android.util.Log
-import androidx.appcompat.app.AlertDialog
 import kotlinx.android.synthetic.main.activity_kakao_map.*
 import net.daum.mf.map.api.MapPOIItem
 import net.daum.mf.map.api.MapPOIItem.MarkerType.BluePin
 import net.daum.mf.map.api.MapPOIItem.MarkerType.RedPin
 import net.daum.mf.map.api.MapPoint
 import net.daum.mf.map.api.MapView
-import java.lang.Exception
-import java.security.MessageDigest
 
 
 
@@ -27,6 +17,7 @@ class KakaoMapActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_kakao_map)
+
         try {
             val info = packageManager.getPackageInfo("com.sap.kaisa", PackageManager.GET_SIGNATURES)
 
@@ -52,6 +43,7 @@ class KakaoMapActivity : AppCompatActivity() {
         val mapView = MapView(this)
         // 더이상 사용되지 않는다고 하지만 아래 코드를 추가하지 않으면 Black Screen 현상 발생
         // '네이티브 앱 키를 잘못 입력하면 White Scree 현상 발생
+        mapView.setDaumMapApiKey("f0bad00d73838e98688639990447d0d8")
         //mapView.setDaumMapApiKey("l13s+5ijlDagVoApn4/KvDGZxu4=")
 
         val mapViewContainer = map_view
