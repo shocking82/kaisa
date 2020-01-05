@@ -11,6 +11,7 @@ import android.os.Bundle
 import android.provider.Settings
 import android.util.Base64
 import android.util.Log
+import android.widget.ImageView
 import android.widget.Toast
 
 import androidx.core.app.ActivityCompat
@@ -36,6 +37,7 @@ class KakaoMapActivity : AppCompatActivity(), MapView.CurrentLocationEventListen
     private val GPS_ENABLE_REQUEST_CODE = 2001
     private val PERMISSIONS_REQUEST_CODE = 100
     var REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.ACCESS_FINE_LOCATION)
+    lateinit var imageView : ImageView
 
     private lateinit var mapView: MapView
 //    lateinit var mAdView : AdView

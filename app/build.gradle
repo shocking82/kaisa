@@ -36,4 +36,5 @@ dependencies {
     implementation fileTree(dir: 'src/main/jniLibs', include: ['*.aar', '*.jar'], exclude: [])
     //implementation files('')
     implementation 'com.google.android.gms:play-services-ads:18.0.0'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
 }
