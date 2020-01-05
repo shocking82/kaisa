@@ -30,6 +30,10 @@
             android:name="com.kakao.sdk.AppKey"
             android:value="85c1ad0eb6b18561d94cf539fd442b68" />
 
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="@string/admob_app_id" />
+
     </application>
 
 </manifest>

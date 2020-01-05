@@ -6,32 +6,49 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.LocationManager
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.Settings
+import android.util.Base64
 import android.util.Log
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
+
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.AdSize
+import com.google.android.gms.ads.AdView
+import com.google.android.gms.ads.MobileAds
 import kotlinx.android.synthetic.main.activity_kakao_map.*
+import net.daum.mf.map.api.MapPOIItem
+import net.daum.mf.map.api.MapPOIItem.MarkerType.BluePin
+import net.daum.mf.map.api.MapPOIItem.MarkerType.RedPin
 import net.daum.mf.map.api.MapPoint
 import net.daum.mf.map.api.MapReverseGeoCoder
 import net.daum.mf.map.api.MapView
+import java.lang.Exception
+import java.security.MessageDigest
 
 
 class KakaoMapActivity : AppCompatActivity(), MapView.CurrentLocationEventListener, MapReverseGeoCoder.ReverseGeoCodingResultListener {
 
     private val LOG_TAG = "KakaoMapActivity"
-
     private val GPS_ENABLE_REQUEST_CODE = 2001
     private val PERMISSIONS_REQUEST_CODE = 100
     var REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.ACCESS_FINE_LOCATION)
 
     private lateinit var mapView: MapView
+//    lateinit var mAdView : AdView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_kakao_map)
+
+//        MobileAds.initialize(this) {}
+//        mAdView = findViewById(R.id.adView)
+//        val adRequest = AdRequest.Builder().build()
+//        mAdView.loadAd(adRequest)
+
 
 //        try {
 //            val info = packageManager.getPackageInfo("com.sap.kaisa", PackageManager.GET_SIGNATURES)
@@ -48,10 +65,10 @@ class KakaoMapActivity : AppCompatActivity(), MapView.CurrentLocationEventListen
 //        }
 
         // GPS 체크
-//        val locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
-//        if(!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
-//            buildAlertMessgeNoGps()
-//        }
+        val locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        if(!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
+            buildAlertMessgeNoGps()
+        }
 
 
         // 맵 생성
@@ -59,16 +76,15 @@ class KakaoMapActivity : AppCompatActivity(), MapView.CurrentLocationEventListen
         mapView.setCurrentLocationEventListener(this)
 
         if (!checkLocationServicesStatus()) {
-
             showDialogForLocationServiceSetting()
         }else {
-
             checkRunTimePermission()
         }
 
         val mapViewContainer = map_view
 
         mapViewContainer.addView(mapView)
+
 
         //현재위치로 이동
 //        mapView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord(33.3, 127.0),true)
@@ -116,9 +132,6 @@ class KakaoMapActivity : AppCompatActivity(), MapView.CurrentLocationEventListen
         if(requestCode == PERMISSIONS_REQUEST_CODE && grantResults.size == REQUIRED_PERMISSIONS.size){
             var check_result = true
 
-
-            // 모든 퍼미션을 허용했는지 체크합니다.
-
             // 모든 퍼미션을 허용했는지 체크합니다.
             for (result in grantResults) {
                 if (result != PackageManager.PERMISSION_GRANTED) {
@@ -126,7 +139,6 @@ class KakaoMapActivity : AppCompatActivity(), MapView.CurrentLocationEventListen
                     break
                 }
             }
-
 
             if (check_result) {
                 Log.d("@@@", "start")
@@ -156,8 +168,7 @@ class KakaoMapActivity : AppCompatActivity(), MapView.CurrentLocationEventListen
     }
 
     private fun showDialogForLocationServiceSetting() {
-        val builder =
-            AlertDialog.Builder(this)
+        val builder = AlertDialog.Builder(this)
         builder.setTitle("위치 서비스 비활성화")
         builder.setMessage(
             "앱을 사용하기 위해서는 위치 서비스가 필요합니다.\n"
